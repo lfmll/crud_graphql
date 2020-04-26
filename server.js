@@ -20,7 +20,7 @@ const schema=buildSchema(`
       views:Int
     }
     type Query{
-      getCourses:[Course]
+      getCourses(page:Int, limit:Int=1):[Course]
       getCourse(id:ID!):Course
     }
     type Mutation{
@@ -31,7 +31,10 @@ const schema=buildSchema(`
 `);
 
 const root={
-  getCourses(){
+  getCourses({page,limit}){
+    if(page!==undefined){
+      return courses.slice((page-1)*limit,(page)*limit);
+    }
     return courses;
   },
   getCourse({id}){
